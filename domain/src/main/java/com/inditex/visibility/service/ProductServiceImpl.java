@@ -1,6 +1,7 @@
 package com.inditex.visibility.service;
 
 import com.inditex.visibility.data.ProductDto;
+import com.inditex.visibility.data.SizeDto;
 import com.inditex.visibility.ports.api.ProductServicePort;
 import com.inditex.visibility.ports.spi.ProductPersistencePort;
 import lombok.AllArgsConstructor;
@@ -37,7 +38,8 @@ public class ProductServiceImpl implements ProductServicePort {
 
         var allProductsBackSoon = allProducts.stream()
                 .filter(productDto -> productDto.getSizeList().stream()
-                        .anyMatch(sizeDto -> !sizeDto.isSpecial() && sizeDto.isBackSoon()))
+                        .anyMatch(sizeDto -> !sizeDto.isSpecial() && sizeDto.isBackSoon()) &&
+                        productDto.getSizeList().stream().noneMatch(SizeDto::isSpecial))
                 .toList();
         var allFilteredProducts = new HashSet<>(allProductsBackSoon);
         var allProductsSpecial = allProducts.stream()
